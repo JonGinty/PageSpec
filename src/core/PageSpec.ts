@@ -11,18 +11,35 @@ export function bind(ops?: BindOptions) {
 
 const propertyMetadataKey = Symbol.for("design:propertyMetadata");
 
+export function fromQuery<T>(spec: Newable<T>, ops?: FromQueryOptions): T {
+    return fromRecord(spec, objectKeysToLowerCase( getAllUrlParameters(ops?.query)));
+}
 
-export function fromQuery(obj: any, ops?: FromQueryOptions) {
+/**
+ * TODO: so the JSON could actually already have the
+ * type info on it, maybe need to consider what to
+ * do here.
+ * @param obj 
+ * @param json 
+ */
+export function fromJson<T>(spec: Newable<T>, json: string): T {
+    return fromRecord(spec, JSON.parse(json));
+}
+
+export type Newable<T> = { new (...args: any[]): T; };
+
+export function fromRecord<T>(spec: Newable<T>, record: Record<string, string>): T {
+    const obj = new spec() as any;
     const metadata = getPropertyMetadata(obj);
-    if (!metadata) return;
-    const allParams = objectKeysToLowerCase( getAllUrlParameters(ops?.query));
+    if (!metadata) return obj;
 
     for (const key in metadata) {
-        if (key in allParams) {
+        if (key in record) {
             const binder = getBinderFunc(metadata[key]?.type);
-            obj[key] = binder(allParams[key], { propName: key });
+            obj[key] = binder(record[key], { propName: key });
         }
     }
+    return obj;
 }
 
 export function getPropertyMetadata(target: any): MetaDataCollection {
