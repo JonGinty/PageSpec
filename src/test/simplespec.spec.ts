@@ -1,5 +1,5 @@
 import {describe, expect, test} from '@jest/globals';
-import {bind, fromJson, fromQuery} from '../core/PageSpec';
+import {bind, BinderFunc, fromJson, fromQuery} from '../core/PageSpec';
 
 
 
@@ -29,10 +29,18 @@ describe("simple spec", () => {
         expect(s.somenumber).toEqual(4.5);
         expect(s.somebool).toEqual(true);
     });
+
+    test("custom binder function", () => {
+        const s = fromQuery(MoreAdvancedSpec, {query: "somestring=test&somenumber=4.5&somenegativenumber=6.1&somebool=true"});
+        expect(s.somestring).toEqual("test");
+        expect(s.somenumber).toEqual(4.5);
+        expect(s.somebool).toEqual(true);
+        expect(s.somenegativenumber).toEqual(-6.1);
+    })
 });
 
 
-
+const negativeBinder: BinderFunc = (value:string) => 0 - Number(value);
 
 class SimpleSpec {
     @bind() 
@@ -42,5 +50,10 @@ class SimpleSpec {
     somenumber?: number;
 
     @bind({type: "boolean"})
-    somebool?: number
+    somebool?: boolean;
+}
+
+class MoreAdvancedSpec extends SimpleSpec {
+    @bind({type: negativeBinder})
+    somenegativenumber?: number;
 }
