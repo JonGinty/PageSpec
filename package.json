@@ -1,0 +1,22 @@
+{
+  "name": "pagespec",
+  "version": "0.0.1",
+  "description": "A simple library to bind complex arguments from http requests.",
+  "main": "n/a",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JonGinty/PageSpec.git"
+  },
+  "author": "Jon Ginty",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/JonGinty/PageSpec/issues"
+  },
+  "homepage": "https://github.com/JonGinty/PageSpec#readme",
+  "devDependencies": {
+    "ts-jest": "^29.0.3"
+  }
+}
