@@ -2,7 +2,6 @@ import { bind, getBinderFunc, BinderFunc, BinderType, BindOptions } from "./bind
 import { getPropertyMetadata, MetaDataCollection } from "./metadata";
 import { getAllUrlParameters, Newable, objectKeysToLowerCase } from "./utils";
 
-
 export { bind }
 export { BinderFunc }
 
@@ -20,8 +19,6 @@ export function fromQuery<T>(spec: Newable<T>, ops?: FromQueryOptions): T {
 export function fromJson<T>(spec: Newable<T>, json: string): T {
     return fromRecord(spec, JSON.parse(json));
 }
-
-
 
 export function fromRecord<T>(spec: Newable<T>, record: Record<string, string>): T {
     const obj = new spec() as any;
